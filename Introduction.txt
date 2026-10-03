@@ -1,0 +1,770 @@
+TIME SERIES (Complete Data Science Notes)
+
+====================================================
+1. What is Time Series?
+====================================================
+
+A Time Series is a sequence of observations collected over time at regular intervals.
+
+Unlike normal datasets where rows are independent, time series data has chronological order, and the order of observations is extremely important.
+
+Examples:
+- Stock prices
+- Weather data
+- Daily sales
+- Electricity consumption
+- Website traffic
+- Heart rate monitoring
+- COVID-19 cases
+- Cryptocurrency prices
+
+Example:
+
+Date        Sales
+01-Jan      100
+02-Jan      110
+03-Jan      120
+04-Jan      115
+
+The value today is often related to previous values.
+
+----------------------------------------------------
+2. Why Time Series is Different from Machine Learning?
+----------------------------------------------------
+
+Normal Machine Learning:
+Rows are independent.
+Shuffling rows does not affect the model.
+
+Example:
+
+Age    Salary
+22     25000
+35     60000
+28     40000
+
+Even if rows are shuffled, nothing changes.
+
+Time Series:
+
+Date    Sales
+Jan     100
+Feb     120
+Mar     140
+
+If shuffled:
+
+Mar     140
+Jan     100
+Feb     120
+
+The information becomes meaningless because time order is lost.
+
+Therefore, time is an important feature.
+
+====================================================
+3. Components of Time Series
+====================================================
+
+A time series consists of four major components.
+
+Time Series = Trend + Seasonality + Cyclic + Noise
+
+or
+
+Y = T + S + C + R
+
+----------------------------------------------------
+A. Trend
+----------------------------------------------------
+
+Trend is the long-term increase or decrease in data.
+
+Example:
+
+Year    Sales
+2018    200
+2019    240
+2020    280
+2021    340
+2022    410
+
+Sales continuously increase.
+
+Types:
+- Upward Trend
+- Downward Trend
+- No Trend
+
+Examples:
+- Population growth
+- Inflation
+- Company revenue
+
+----------------------------------------------------
+B. Seasonality
+----------------------------------------------------
+
+Seasonality is a repeating pattern occurring at fixed intervals.
+
+Examples:
+- Ice cream sales increase every summer.
+- Umbrella sales increase every rainy season.
+- Shopping increases during Diwali or Christmas.
+- Electricity consumption increases every evening.
+
+Characteristics:
+- Fixed interval
+- Predictable
+- Repeats regularly
+
+----------------------------------------------------
+C. Cyclic Pattern
+----------------------------------------------------
+
+Cycles are long-term fluctuations that do NOT occur at fixed intervals.
+
+Examples:
+- Economic growth
+- Recession
+- Recovery
+- Business cycles
+
+Unlike seasonality, cycles may occur after 3 years, 5 years, or 8 years.
+
+----------------------------------------------------
+D. Random Noise
+----------------------------------------------------
+
+Noise consists of unpredictable fluctuations.
+
+Examples:
+- War
+- Earthquake
+- COVID
+- Machine failure
+- Stock market crash
+
+Noise cannot be predicted accurately.
+
+====================================================
+4. Types of Time Series
+====================================================
+
+A. Univariate Time Series
+
+Only one variable changes over time.
+
+Example:
+Daily Temperature
+
+B. Multivariate Time Series
+
+Multiple variables are recorded over time.
+
+Example:
+Temperature
+Humidity
+Wind Speed
+Rainfall
+
+====================================================
+5. Time Intervals
+====================================================
+
+Time series may be recorded:
+
+Every second
+Every minute
+Hourly
+Daily
+Weekly
+Monthly
+Quarterly
+Yearly
+
+====================================================
+6. Stationary Time Series
+====================================================
+
+Stationarity is the most important concept in time series.
+
+A stationary series has:
+
+1. Constant Mean
+2. Constant Variance
+3. Constant Covariance
+
+Example:
+
+3
+4
+5
+4
+3
+5
+4
+
+Mean and variance remain approximately constant.
+
+This is stationary.
+
+----------------------------------------------------
+Non-Stationary Example
+----------------------------------------------------
+
+20
+25
+30
+35
+40
+45
+50
+
+Mean continuously changes.
+
+This is non-stationary.
+
+====================================================
+7. Why Stationarity is Important?
+====================================================
+
+Most statistical forecasting algorithms assume stationarity.
+
+Examples:
+- AR
+- MA
+- ARMA
+- ARIMA
+
+If data is non-stationary, predictions become unreliable.
+
+====================================================
+8. How to Make Data Stationary
+====================================================
+
+A. Differencing
+
+Subtract consecutive observations.
+
+Original:
+
+100
+120
+140
+160
+
+Differenced:
+
+20
+20
+20
+
+Formula:
+
+Yt - Y(t-1)
+
+----------------------------------------------------
+
+B. Log Transformation
+
+Useful when variance increases over time.
+
+Original:
+
+100
+300
+900
+2700
+
+Log:
+
+2.00
+2.48
+2.95
+3.43
+
+Large variations become smaller.
+
+----------------------------------------------------
+
+C. Moving Average
+
+Smooths short-term fluctuations.
+
+Example:
+
+100
+110
+90
+120
+100
+
+3-point Moving Average
+
+(100+110+90)/3
+
+====================================================
+9. Time Series Decomposition
+====================================================
+
+A time series can be divided into:
+
+Original Data
+
+↓
+
+Trend
+
+↓
+
+Seasonality
+
+↓
+
+Residual (Noise)
+
+Python:
+
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+result = seasonal_decompose(data)
+result.plot()
+
+====================================================
+10. Lag
+====================================================
+
+Lag means previous observations.
+
+Example:
+
+Day    Sales
+
+1      100
+2      110
+3      120
+4      130
+
+Lag-1
+
+Today's value depends on yesterday.
+
+Lag-2
+
+Today's value depends on last two days.
+
+====================================================
+11. Rolling Window
+====================================================
+
+Uses previous k observations.
+
+Example:
+
+3-day Rolling Average
+
+Day4
+
+Average(Day1, Day2, Day3)
+
+Useful for smoothing data.
+
+====================================================
+12. Autocorrelation (ACF)
+====================================================
+
+Autocorrelation measures correlation between a variable and its previous values.
+
+Question:
+
+Is today's sales related to yesterday's sales?
+
+If yes,
+there is autocorrelation.
+
+Used to identify MA terms.
+
+====================================================
+13. Partial Autocorrelation (PACF)
+====================================================
+
+Measures direct correlation after removing intermediate lag effects.
+
+Used to identify AR terms.
+
+====================================================
+14. Difference Between ACF and PACF
+====================================================
+
+ACF
+- Total correlation
+- Includes indirect effects
+- Used for MA
+
+PACF
+- Direct correlation
+- Removes indirect effects
+- Used for AR
+
+====================================================
+15. Forecasting
+====================================================
+
+Forecasting means predicting future values.
+
+Past:
+
+100
+105
+110
+115
+120
+
+Future Prediction:
+
+125
+130
+135
+
+====================================================
+16. Train-Test Split
+====================================================
+
+Never shuffle time series.
+
+Wrong:
+
+shuffle=True
+
+Correct:
+
+Past -------------> Future
+
+Training           Testing
+
+Example:
+
+2019-2023 → Train
+
+2024 → Test
+
+====================================================
+17. Evaluation Metrics
+====================================================
+
+MAE
+
+Average absolute error.
+
+MAE = Σ|y-ŷ| / n
+
+----------------------------------------------------
+
+MSE
+
+Average squared error.
+
+MSE = Σ(y-ŷ)² / n
+
+----------------------------------------------------
+
+RMSE
+
+Square root of MSE.
+
+Same unit as original data.
+
+----------------------------------------------------
+
+MAPE
+
+Percentage error.
+
+MAPE = (100/n) × Σ| (y-ŷ)/y |
+
+Easy to interpret but problematic when actual values are zero.
+
+====================================================
+18. Classical Time Series Models
+====================================================
+
+A. Moving Average (MA)
+
+Uses previous forecast errors.
+
+----------------------------------------------------
+
+B. Auto Regression (AR)
+
+Uses previous observations.
+
+----------------------------------------------------
+
+C. ARMA
+
+Combination of AR and MA.
+
+Works only for stationary data.
+
+----------------------------------------------------
+
+D. ARIMA
+
+AR + Integrated + MA
+
+Integrated means differencing.
+
+Handles non-stationary data.
+
+----------------------------------------------------
+
+E. SARIMA
+
+Seasonal ARIMA.
+
+Handles seasonality.
+
+----------------------------------------------------
+
+F. SARIMAX
+
+SARIMA + External Variables.
+
+Example:
+
+Predict Ice Cream Sales using:
+- Past Sales
+- Temperature
+- Holidays
+
+----------------------------------------------------
+
+G. VAR (Vector Auto Regression)
+
+Used for multivariate time series.
+
+====================================================
+19. Machine Learning Models
+====================================================
+
+Can also be used for forecasting after feature engineering.
+
+Examples:
+
+- Linear Regression
+- Decision Tree
+- Random Forest
+- XGBoost
+- LightGBM
+- CatBoost
+- Support Vector Regression
+
+Need features like:
+
+- Lag
+- Rolling Mean
+- Month
+- Year
+- Day
+- Holiday
+- Week Number
+
+====================================================
+20. Deep Learning Models
+====================================================
+
+Used for very large datasets.
+
+Examples:
+
+- RNN
+- LSTM
+- GRU
+- Transformer
+
+Best for:
+
+- Speech
+- Stock prediction
+- Weather
+- IoT
+- NLP
+- Sensor data
+
+====================================================
+21. Feature Engineering
+====================================================
+
+Common Features:
+
+Lag Features
+
+Rolling Mean
+
+Rolling Standard Deviation
+
+Day
+
+Month
+
+Year
+
+Quarter
+
+Weekend
+
+Holiday
+
+Festival
+
+Temperature
+
+Rainfall
+
+====================================================
+22. Common Problems
+====================================================
+
+Missing Values
+
+Outliers
+
+Trend
+
+Changing Seasonality
+
+Noise
+
+Irregular Time Intervals
+
+Data Drift
+
+====================================================
+23. Python Libraries
+====================================================
+
+pandas
+Data manipulation
+
+NumPy
+Numerical computation
+
+Matplotlib
+Visualization
+
+Plotly
+Interactive visualization
+
+statsmodels
+ARIMA, SARIMA, ACF, PACF
+
+scikit-learn
+Machine Learning models
+
+Prophet
+Business forecasting
+
+TensorFlow/Keras
+LSTM, GRU
+
+PyTorch
+Deep learning
+
+====================================================
+24. Time Series Workflow
+====================================================
+
+Collect Data
+
+↓
+
+Clean Missing Values
+
+↓
+
+Handle Outliers
+
+↓
+
+Visualize Data
+
+↓
+
+Check Trend & Seasonality
+
+↓
+
+Check Stationarity
+
+↓
+
+Make Stationary (if needed)
+
+↓
+
+Create Train-Test Split
+
+↓
+
+Feature Engineering
+
+↓
+
+Choose Model
+
+↓
+
+Train Model
+
+↓
+
+Forecast Future
+
+↓
+
+Evaluate Performance
+
+↓
+
+Deploy Model
+
+====================================================
+25. Interview Questions
+====================================================
+
+1. What is Time Series?
+
+2. Why can't we randomly shuffle time series data?
+
+3. What are the four components of a time series?
+
+4. What is stationarity?
+
+5. Why is stationarity important?
+
+6. How do you make a series stationary?
+
+7. What is differencing?
+
+8. Difference between trend and seasonality?
+
+9. Difference between ACF and PACF?
+
+10. Difference between AR, MA, ARMA, ARIMA and SARIMA?
+
+11. What is lag?
+
+12. What is rolling window?
+
+13. Why do we use chronological train-test split?
+
+14. Which evaluation metrics are commonly used in forecasting?
+
+15. When would you use ARIMA, SARIMA, XGBoost, or LSTM?
+
+====================================================
+Summary
+====================================================
+
+Time Series is data collected over time where the order of observations matters. It consists of Trend, Seasonality, Cyclic patterns, and Noise. Before modeling, we analyze stationarity, perform preprocessing (such as differencing or transformations if needed), engineer time-based features, split the data chronologically, train an appropriate forecasting model, evaluate it using metrics like MAE or RMSE, and then use the model to predict future values.
